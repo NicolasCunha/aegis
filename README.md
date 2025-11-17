@@ -1,5 +1,7 @@
 # Aegis
 
+> **WARNING: This is still a work in progress.**
+
 Simple and secure user authentication and authorization for your applications.
 
 ## What is Aegis?
