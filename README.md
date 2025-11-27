@@ -257,53 +257,7 @@ The multi-stage Dockerfile:
 1. **Stage 1 (builder):** Compiles Go binary with CGO for SQLite
 2. **Stage 2 (runtime):** Alpine with NGINX, supervisor, and compiled binary
 
-### Troubleshooting
-
-**Container won't start:**
-```bash
-# Check logs
-sudo docker compose logs aegis
-
-# Check container status
-sudo docker ps -a
-
-# Rebuild from scratch
-sudo docker compose down
-sudo docker compose build --no-cache
-sudo docker compose up -d
-```
-
-**Database not persisting:**
-```bash
-# Check volume
-sudo docker volume ls | grep aegis
-
-# Inspect volume
-sudo docker volume inspect aegis_aegis-data
-```
-
-**API returning empty arrays:**
-```bash
-# Ensure container is healthy
-sudo docker ps
-
-# Seed test data
-./seed-data.sh
-
-# Or manually test API
-curl http://localhost/api/health
-```bash
-cd aegis-server
-
-# Run all tests
-go test ./...
-
-# Run with coverage
-go test ./... -cover
-
-# Run specific package tests
-go test ./api/user -v
-```
+### Testing
 
 The project includes 83 comprehensive tests covering:
 - API integration tests (12 tests)
