@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ Aegis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>🛡️ Aegis Dashboard</h1>
+            </div>
+            <div class="health-status" id="healthStatus">
+                <span class="status-indicator"></span>
+                <span class="status-text">Checking...</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-button active" data-tab="users">
+                    Users <span class="tab-count" id="usersCount">(0)</span>
+                </button>
+                <button class="tab-button" data-tab="roles">
+                    Roles <span class="tab-count" id="rolesCount">(0)</span>
+                </button>
+                <button class="tab-button" data-tab="permissions">
+                    Permissions <span class="tab-count" id="permissionsCount">(0)</span>
+                </button>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="usersTab" class="tab-content active">
+                <div class="section-header">
+                    <h2>Users</h2>
+                    <button class="btn-primary" id="refreshUsers">
+                        <span class="refresh-icon">🔄</span> Refresh
+                    </button>
+                </div>
+                <div id="usersContainer" class="table-container">
+                    <div class="loading">Loading users...</div>
+                </div>
+            </div>
+
+            <!-- Roles Tab -->
+            <div id="rolesTab" class="tab-content">
+                <div class="section-header">
+                    <h2>Roles</h2>
+                    <button class="btn-primary" id="refreshRoles">
+                        <span class="refresh-icon">🔄</span> Refresh
+                    </button>
+                </div>
+                <div id="rolesContainer" class="table-container">
+                    <div class="loading">Loading roles...</div>
+                </div>
+            </div>
+
+            <!-- Permissions Tab -->
+            <div id="permissionsTab" class="tab-content">
+                <div class="section-header">
+                    <h2>Permissions</h2>
+                    <button class="btn-primary" id="refreshPermissions">
+                        <span class="refresh-icon">🔄</span> Refresh
+                    </button>
+                </div>
+                <div id="permissionsContainer" class="table-container">
+                    <div class="loading">Loading permissions...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div style="text-align: center;">
+        <p>Aegis User Management System &copy; 2025</p>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
