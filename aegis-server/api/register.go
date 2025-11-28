@@ -4,6 +4,7 @@ import (
 	"os"
 	"log"
 	"github.com/gin-gonic/gin"
+	authApi "nfcunha/aegis/api/auth"
 	userApi "nfcunha/aegis/api/user"
 	roleApi "nfcunha/aegis/api/role"
 	permissionApi "nfcunha/aegis/api/permission"
@@ -25,8 +26,11 @@ func getServerPort() string {
 func RegisterApis() {
 	router := gin.Default()
 	
+	// Create aegis context path group
+	aegis := router.Group("/aegis")
+	
 	// Health check endpoint
-	router.GET("/health", func(c *gin.Context) {
+	aegis.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status": "healthy",
 			"service": "aegis",
@@ -34,10 +38,11 @@ func RegisterApis() {
 		})
 	})
 	
-	// Register API routes
-	userApi.RegisterApi(router)
-	roleApi.RegisterApi(router)
-	permissionApi.RegisterApi(router)
+	// Register API routes under /aegis context path
+	authApi.RegisterApi(aegis)
+	userApi.RegisterApi(aegis)
+	roleApi.RegisterApi(aegis)
+	permissionApi.RegisterApi(aegis)
 	
 	err := router.Run(getServerPort())
 	if err != nil {

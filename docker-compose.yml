@@ -5,14 +5,14 @@ services:
       dockerfile: Dockerfile
     container_name: aegis
     ports:
-      - "80:80"
+      - "3100:3100"
     env_file:
       - config/aegis.env
     volumes:
       - aegis-data:/app/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/api/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3100/api/aegis/health"]
       interval: 30s
       timeout: 10s
       retries: 3

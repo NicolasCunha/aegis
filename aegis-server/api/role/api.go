@@ -32,8 +32,8 @@ type RoleResponse struct {
 // Endpoints include create, list, get, update, and delete.
 //
 // Parameters:
-//   - router: The Gin engine to register routes with
-func RegisterApi(router *gin.Engine) {
+//   - router: The Gin RouterGroup to register routes with (already under /aegis)
+func RegisterApi(router gin.IRouter) {
 	roles := router.Group("/roles")
 	{
 		roles.POST("", createRole)
@@ -81,7 +81,7 @@ func listRoles(c *gin.Context) {
 
 func getRole(c *gin.Context) {
 	name := c.Param("name")
-	log.Printf("GET /roles/%s - Get role request received", name)
+	log.Printf("GET /aegis/roles/%s - Get role request received", name)
 
 	role := roleService.GetRoleByName(name)
 	if role == nil {
@@ -117,7 +117,7 @@ func updateRole(c *gin.Context) {
 
 func deleteRole(c *gin.Context) {
 	name := c.Param("name")
-	log.Printf("DELETE /roles/%s - Delete role request received", name)
+	log.Printf("DELETE /aegis/roles/%s - Delete role request received", name)
 
 	role := roleService.GetRoleByName(name)
 	if role == nil {

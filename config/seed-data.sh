@@ -5,7 +5,7 @@
 
 set -e
 
-API_BASE="${API_BASE:-http://localhost/api}"
+API_BASE="${API_BASE:-http://localhost:3100/api/aegis}"
 
 echo "🌱 Seeding Aegis with test data..."
 echo "📡 API Base URL: $API_BASE"

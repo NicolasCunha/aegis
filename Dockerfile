@@ -46,8 +46,8 @@ COPY config/nginx.conf /etc/nginx/conf.d/default.conf
 # Copy supervisor configuration
 COPY config/supervisord.conf /etc/supervisord.conf
 
-# Expose port 80
-EXPOSE 80
+# Expose port 3100
+EXPOSE 3100
 
 # Start supervisor to run both services
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

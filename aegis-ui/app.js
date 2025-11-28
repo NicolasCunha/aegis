@@ -1,5 +1,5 @@
 // API Base URL - adjust based on environment
-const API_BASE = '/api';
+const API_BASE = '/api/aegis';
 
 // State management
 const state = {

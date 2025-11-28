@@ -71,8 +71,8 @@ type LoginResponse struct {
 // Endpoints include register, login, list, get, update, delete, and change password.
 //
 // Parameters:
-//   - router: The Gin engine to register routes with
-func RegisterApi(router *gin.Engine) {
+//   - router: The Gin RouterGroup to register routes with (already under /aegis)
+func RegisterApi(router gin.IRouter) {
 	users := router.Group("/users")
 	{
 		users.POST("/register", registerUser)
@@ -91,7 +91,7 @@ func RegisterApi(router *gin.Engine) {
 }
 
 func registerUser(c *gin.Context) {
-	log.Println("POST /users/register - Register user request received")
+	log.Println("POST /aegis/users/register - Register user request received")
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Printf("Invalid request body: %v", err)
@@ -127,7 +127,7 @@ func registerUser(c *gin.Context) {
 }
 
 func loginUser(c *gin.Context) {
-	log.Println("POST /users/login - Login request received")
+	log.Println("POST /aegis/users/login - Login request received")
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Printf("Invalid request body: %v", err)
@@ -179,7 +179,7 @@ func loginUser(c *gin.Context) {
 }
 
 func refreshToken(c *gin.Context) {
-	log.Println("POST /users/refresh - Refresh token request received")
+	log.Println("POST /aegis/users/refresh - Refresh token request received")
 	var req RefreshTokenRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Printf("Invalid request body: %v", err)
@@ -251,7 +251,7 @@ func listUsers(c *gin.Context) {
 
 func getUser(c *gin.Context) {
 	idStr := c.Param("id")
-	log.Printf("GET /users/%s - Get user request received", idStr)
+	log.Printf("GET /aegis/users/%s - Get user request received", idStr)
 	userId, err := uuid.Parse(idStr)
 	if err != nil {
 		log.Printf("Invalid user ID: %s", idStr)
@@ -327,7 +327,7 @@ func updateUser(c *gin.Context) {
 
 func deleteUser(c *gin.Context) {
 	idStr := c.Param("id")
-	log.Printf("DELETE /users/%s - Delete user request received", idStr)
+	log.Printf("DELETE /aegis/users/%s - Delete user request received", idStr)
 	userId, err := uuid.Parse(idStr)
 	if err != nil {
 		log.Printf("Invalid user ID: %s", idStr)
@@ -383,7 +383,7 @@ func changePassword(c *gin.Context) {
 
 func addRoleToUser(c *gin.Context) {
 	idStr := c.Param("id")
-	log.Printf("POST /users/%s/roles - Add role to user request received", idStr)
+	log.Printf("POST /aegis/users/%s/roles - Add role to user request received", idStr)
 	userId, err := uuid.Parse(idStr)
 	if err != nil {
 		log.Printf("Invalid user ID: %s", idStr)
@@ -424,7 +424,7 @@ func addRoleToUser(c *gin.Context) {
 func removeRoleFromUser(c *gin.Context) {
 	idStr := c.Param("id")
 	roleStr := c.Param("role")
-	log.Printf("DELETE /users/%s/roles/%s - Remove role from user request received", idStr, roleStr)
+	log.Printf("DELETE /aegis/users/%s/roles/%s - Remove role from user request received", idStr, roleStr)
 	userId, err := uuid.Parse(idStr)
 	if err != nil {
 		log.Printf("Invalid user ID: %s", idStr)
@@ -457,7 +457,7 @@ func removeRoleFromUser(c *gin.Context) {
 
 func addPermissionToUser(c *gin.Context) {
 	idStr := c.Param("id")
-	log.Printf("POST /users/%s/permissions - Add permission to user request received", idStr)
+	log.Printf("POST /aegis/users/%s/permissions - Add permission to user request received", idStr)
 	userId, err := uuid.Parse(idStr)
 	if err != nil {
 		log.Printf("Invalid user ID: %s", idStr)
@@ -498,7 +498,7 @@ func addPermissionToUser(c *gin.Context) {
 func removePermissionFromUser(c *gin.Context) {
 	idStr := c.Param("id")
 	permissionStr := c.Param("permission")
-	log.Printf("DELETE /users/%s/permissions/%s - Remove permission from user request received", idStr, permissionStr)
+	log.Printf("DELETE /aegis/users/%s/permissions/%s - Remove permission from user request received", idStr, permissionStr)
 	userId, err := uuid.Parse(idStr)
 	if err != nil {
 		log.Printf("Invalid user ID: %s", idStr)

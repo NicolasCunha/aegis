@@ -20,6 +20,7 @@ const REFRESH_TOKEN_EXTRA_TIME = 1 * time.Minute
 
 // TokenClaims represents the JWT claims structure containing user identity and authorization data.
 // It embeds jwt.RegisteredClaims for standard JWT fields like expiration and issuer.
+// The JTI (JWT ID) field provides a unique identifier for each token, enabling token revocation.
 type TokenClaims struct {
 	UserId      string   `json:"user_id"`
 	Subject     string   `json:"subject"`
@@ -81,6 +82,7 @@ func GenerateTokenPair(userId uuid.UUID, subject string, roles []string, permiss
 }
 
 // generateTokenWithType creates a JWT token with a specific type (access or refresh).
+// Each token includes a unique JTI (JWT ID) claim for revocation support.
 func generateTokenWithType(userId uuid.UUID, subject string, roles []string, permissions []string, tokenType string, expiration time.Duration) (*TokenOutput, error) {
 	expirationTime := time.Now().Add(expiration)
 
@@ -91,6 +93,7 @@ func generateTokenWithType(userId uuid.UUID, subject string, roles []string, per
 		Permissions: permissions,
 		TokenType:   tokenType,
 		RegisteredClaims: jwt.RegisteredClaims{
+			ID:        uuid.New().String(), // JTI: Unique identifier for token revocation
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			Issuer:    "aegis",

@@ -32,8 +32,8 @@ type PermissionResponse struct {
 // Endpoints include create, list, get, update, and delete.
 //
 // Parameters:
-//   - router: The Gin engine to register routes with
-func RegisterApi(router *gin.Engine) {
+//   - router: The Gin RouterGroup to register routes with (already under /aegis)
+func RegisterApi(router gin.IRouter) {
 	permissions := router.Group("/permissions")
 	{
 		permissions.POST("", createPermission)
@@ -81,7 +81,7 @@ func listPermissions(c *gin.Context) {
 
 func getPermission(c *gin.Context) {
 	name := c.Param("name")
-	log.Printf("GET /permissions/%s - Get permission request received", name)
+	log.Printf("GET /aegis/permissions/%s - Get permission request received", name)
 
 	permission := permissionService.GetPermissionByName(name)
 	if permission == nil {
@@ -117,7 +117,7 @@ func updatePermission(c *gin.Context) {
 
 func deletePermission(c *gin.Context) {
 	name := c.Param("name")
-	log.Printf("DELETE /permissions/%s - Delete permission request received", name)
+	log.Printf("DELETE /aegis/permissions/%s - Delete permission request received", name)
 
 	permission := permissionService.GetPermissionByName(name)
 	if permission == nil {

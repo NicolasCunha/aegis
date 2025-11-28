@@ -31,7 +31,8 @@ func teardownTestDB() {
 func setupRouter() *gin.Engine {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
-	RegisterApi(router)
+	aegis := router.Group("/aegis")
+	RegisterApi(aegis)
 	return router
 }
 
@@ -60,7 +61,7 @@ func TestRegisterUser_Success(t *testing.T) {
 	}
 	body, _ := json.Marshal(reqBody)
 	
-	req, _ := http.NewRequest("POST", "/users/register", bytes.NewBuffer(body))
+	req, _ := http.NewRequest("POST", "/aegis/users/register", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -86,7 +87,7 @@ func TestRegisterUser_InvalidPassword(t *testing.T) {
 	}
 	body, _ := json.Marshal(reqBody)
 	
-	req, _ := http.NewRequest("POST", "/users/register", bytes.NewBuffer(body))
+	req, _ := http.NewRequest("POST", "/aegis/users/register", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -105,7 +106,7 @@ func TestRegisterUser_DuplicateSubject(t *testing.T) {
 		Password: "password123",
 	}
 	body1, _ := json.Marshal(reqBody1)
-	req1, _ := http.NewRequest("POST", "/users/register", bytes.NewBuffer(body1))
+	req1, _ := http.NewRequest("POST", "/aegis/users/register", bytes.NewBuffer(body1))
 	req1.Header.Set("Content-Type", "application/json")
 	w1 := httptest.NewRecorder()
 	router.ServeHTTP(w1, req1)
@@ -116,7 +117,7 @@ func TestRegisterUser_DuplicateSubject(t *testing.T) {
 		Password: "password456",
 	}
 	body2, _ := json.Marshal(reqBody2)
-	req2, _ := http.NewRequest("POST", "/users/register", bytes.NewBuffer(body2))
+	req2, _ := http.NewRequest("POST", "/aegis/users/register", bytes.NewBuffer(body2))
 	req2.Header.Set("Content-Type", "application/json")
 	w2 := httptest.NewRecorder()
 	router.ServeHTTP(w2, req2)
@@ -136,7 +137,7 @@ func TestLoginUser_Success(t *testing.T) {
 		Password: password,
 	}
 	regBodyJSON, _ := json.Marshal(regBody)
-	regReq, _ := http.NewRequest("POST", "/users/register", bytes.NewBuffer(regBodyJSON))
+	regReq, _ := http.NewRequest("POST", "/aegis/users/register", bytes.NewBuffer(regBodyJSON))
 	regReq.Header.Set("Content-Type", "application/json")
 	regW := httptest.NewRecorder()
 	router.ServeHTTP(regW, regReq)
@@ -148,7 +149,7 @@ func TestLoginUser_Success(t *testing.T) {
 	}
 	loginBodyJSON, _ := json.Marshal(loginBody)
 	
-	req, _ := http.NewRequest("POST", "/users/login", bytes.NewBuffer(loginBodyJSON))
+	req, _ := http.NewRequest("POST", "/aegis/users/login", bytes.NewBuffer(loginBodyJSON))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -177,7 +178,7 @@ func TestLoginUser_WrongPassword(t *testing.T) {
 		Password: "password123",
 	}
 	regBodyJSON, _ := json.Marshal(regBody)
-	regReq, _ := http.NewRequest("POST", "/users/register", bytes.NewBuffer(regBodyJSON))
+	regReq, _ := http.NewRequest("POST", "/aegis/users/register", bytes.NewBuffer(regBodyJSON))
 	regReq.Header.Set("Content-Type", "application/json")
 	regW := httptest.NewRecorder()
 	router.ServeHTTP(regW, regReq)
@@ -189,7 +190,7 @@ func TestLoginUser_WrongPassword(t *testing.T) {
 	}
 	loginBodyJSON, _ := json.Marshal(loginBody)
 	
-	req, _ := http.NewRequest("POST", "/users/login", bytes.NewBuffer(loginBodyJSON))
+	req, _ := http.NewRequest("POST", "/aegis/users/login", bytes.NewBuffer(loginBodyJSON))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -208,7 +209,7 @@ func TestLoginUser_NonExistentUser(t *testing.T) {
 	}
 	body, _ := json.Marshal(loginBody)
 	
-	req, _ := http.NewRequest("POST", "/users/login", bytes.NewBuffer(body))
+	req, _ := http.NewRequest("POST", "/aegis/users/login", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -221,7 +222,7 @@ func TestLoginUser_NonExistentUser(t *testing.T) {
 func TestListUsers(t *testing.T) {
 	router := setupRouter()
 	
-	req, _ := http.NewRequest("GET", "/users", nil)
+	req, _ := http.NewRequest("GET", "/aegis/users", nil)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	
@@ -245,7 +246,7 @@ func TestGetUser_Success(t *testing.T) {
 	user := userService.CreateUser("getuser1@example.com", "password123", "system")
 	userService.SaveUser(user)
 	
-	req, _ := http.NewRequest("GET", "/users/"+user.Id.String(), nil)
+	req, _ := http.NewRequest("GET", "/aegis/users/"+user.Id.String(), nil)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	
@@ -264,7 +265,7 @@ func TestGetUser_Success(t *testing.T) {
 func TestGetUser_NotFound(t *testing.T) {
 	router := setupRouter()
 	
-	req, _ := http.NewRequest("GET", "/users/00000000-0000-0000-0000-000000000000", nil)
+	req, _ := http.NewRequest("GET", "/aegis/users/00000000-0000-0000-0000-000000000000", nil)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	
@@ -280,7 +281,7 @@ func TestDeleteUser_Success(t *testing.T) {
 	user := userService.CreateUser("deleteuser1@example.com", "password123", "system")
 	userService.SaveUser(user)
 	
-	req, _ := http.NewRequest("DELETE", "/users/"+user.Id.String(), nil)
+	req, _ := http.NewRequest("DELETE", "/aegis/users/"+user.Id.String(), nil)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	
@@ -309,7 +310,7 @@ func TestChangePassword_Success(t *testing.T) {
 	}
 	body, _ := json.Marshal(reqBody)
 	
-	req, _ := http.NewRequest("POST", "/users/"+user.Id.String()+"/password", bytes.NewBuffer(body))
+	req, _ := http.NewRequest("POST", "/aegis/users/"+user.Id.String()+"/password", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -341,7 +342,7 @@ func TestChangePassword_WrongOldPassword(t *testing.T) {
 	}
 	body, _ := json.Marshal(reqBody)
 	
-	req, _ := http.NewRequest("POST", "/users/"+user.Id.String()+"/password", bytes.NewBuffer(body))
+	req, _ := http.NewRequest("POST", "/aegis/users/"+user.Id.String()+"/password", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
