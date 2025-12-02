@@ -313,17 +313,39 @@ func PersistUser(user *User) {
 	existingUser := GetUserById(user.Id)
 	if existingUser == nil {
 		SaveUser(user)
+		// New user, add all roles and permissions
+		for _, role := range user.Roles {
+			AddUserRole(user, role)
+		}
+		for _, permission := range user.Permissions {
+			AddUserPermission(user, permission)
+		}
 	} else {
 		UpdateUser(user)
 		syncRoles(user, existingUser)
 		syncPermissions(user, existingUser)
-	}
-
-	for _, role := range user.Roles {
-		AddUserRole(user, role)
-	}
-	for _, permission := range user.Permissions {
-		AddUserPermission(user, permission)
+		
+		// Only add roles that don't already exist
+		existingRolesMap := make(map[UserRole]bool)
+		for _, role := range existingUser.Roles {
+			existingRolesMap[role] = true
+		}
+		for _, role := range user.Roles {
+			if !existingRolesMap[role] {
+				AddUserRole(user, role)
+			}
+		}
+		
+		// Only add permissions that don't already exist
+		existingPermissionsMap := make(map[Permission]bool)
+		for _, permission := range existingUser.Permissions {
+			existingPermissionsMap[permission] = true
+		}
+		for _, permission := range user.Permissions {
+			if !existingPermissionsMap[permission] {
+				AddUserPermission(user, permission)
+			}
+		}
 	}
 }
 
