@@ -1,6 +1,8 @@
+> This is a personal learning project. You’re welcome to use it as a reference or as a starting point for your own ideas. However, I strongly recommend using more mature and stable solutions available in the market rather than relying on this project for production needs.
+
 # 🛡️ Aegis
 
-**A production-ready authentication and authorization service with JWT token management, OAuth 2.0 token introspection, and token revocation.**
+**A authentication and authorization service with JWT token management, OAuth 2.0 token introspection, and token revocation.**
 
 Aegis is designed as a centralized authentication provider that issues and manages JWT tokens for client applications. It provides secure user management, role-based access control (RBAC), and a modern web interface for administration.
 
@@ -696,10 +698,6 @@ sudo docker compose down
 - ✅ **Thread-Safe Operations**: Concurrent access protection
 - ✅ **Input Validation**: Request validation at API layer
 - ✅ **HTTPS Ready**: NGINX reverse proxy configuration
-
-## 📝 License
-
-This is a personal learning project. Feel free to use it as a reference or starting point for your own projects.
 
 ## 🤷 About Aegis
 
